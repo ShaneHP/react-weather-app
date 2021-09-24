@@ -29,7 +29,6 @@ const App = () => {
             /* .then() method */
             if (typeof lat == 'number' && typeof long == 'number') {
                 fetch(
-                    // `${process.env.REACT_APP_API_URL}/weather?lat=${lat}&lon=${long}&units=metric&APPID=${process.env.REACT_APP_API_KEY}`
                     `${process.env.REACT_APP_API_URL}/weather?lat=${lat}&lon=${long}&units=metric&APPID=${process.env.REACT_APP_API_KEY}`
                 )
                     .then((res) => res.json())
