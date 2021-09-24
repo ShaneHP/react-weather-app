@@ -1,7 +1,9 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
+import Weather from './components/Weather';
+import { Dimmer, Loader } from 'semantic-ui-react';
 
-function App() {
+const App = () => {
     const [lat, setLat] = useState([]);
     const [long, setLong] = useState([]);
     const [data, setData] = useState([]);
@@ -17,27 +19,42 @@ function App() {
             console.log('Longitude is:', long);
 
             /* async/await method */
-            const response = await fetch(
-                `${process.env.REACT_APP_API_URL}/weather?lat=${lat}&lon=${long}&units=metric&APPID=${process.env.REACT_APP_API_KEY}`
-            );
-            const responseJSON = await response.json();
-            setData(responseJSON);
-            console.log(responseJSON);
-            /* .then() method */
-
-            // fetch(
+            // const response = await fetch(
             //     `${process.env.REACT_APP_API_URL}/weather?lat=${lat}&lon=${long}&units=metric&APPID=${process.env.REACT_APP_API_KEY}`
-            // )
-            //     .then((res) => res.json())
-            //     .then((result) => {
-            //         setData(result);
-            //         console.log(result);
-            //     });
+            // );
+            // const responseJSON = await response.json();
+            // setData(responseJSON);
+            // console.log(responseJSON);
+
+            /* .then() method */
+            if (typeof lat == 'number' && typeof long == 'number') {
+                fetch(
+                    // `${process.env.REACT_APP_API_URL}/weather?lat=${lat}&lon=${long}&units=metric&APPID=${process.env.REACT_APP_API_KEY}`
+                    `${process.env.REACT_APP_API_URL}/weather?lat=${lat}&lon=${long}&units=metric&APPID=${process.env.REACT_APP_API_KEY}`
+                )
+                    .then((res) => res.json())
+                    .then((result) => {
+                        setData(result);
+                        console.log(result);
+                    });
+            }
         };
         fetchData();
     }, [lat, long]);
 
-    return <div className="App"></div>;
-}
+    return (
+        <div className="App">
+            {typeof data.main != 'undefined' ? (
+                <Weather weatherData={data} />
+            ) : (
+                <div>
+                    <Dimmer active>
+                        <Loader>Loading...</Loader>
+                    </Dimmer>
+                </div>
+            )}
+        </div>
+    );
+};
 
 export default App;
